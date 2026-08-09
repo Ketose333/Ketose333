@@ -1,22 +1,24 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=0:3178C6,100:61DAFB&height=200&section=header&text=GwanYeong%20Kim&fontSize=80&fontAlign=50&fontAlignY=35&desc=Frontend%20%C3%97%20Backend%20Dev&descSize=20&descAlign=50&descAlignY=58)
+![header](https://capsule-render.vercel.app/api?type=waving&color=0:3178C6,100:61DAFB&height=200&section=header&text=GwanYeong%20Kim&fontSize=80&fontAlign=50&fontAlignY=35&desc=Full-Stack%20%26%20AI%20Developer&descSize=20&descAlign=50&descAlignY=58)
 
 # 안녕하세요, 김관영입니다 👋
 
-사용자 입력 → 서버 데이터 → 화면 상태로 이어지는 흐름을 만드는 신입 개발자입니다.
-React/TypeScript/Vite로 화면을 만들고, Spring Boot/MySQL로 API를 연동하는 작업을 주로 해왔습니다.
+사용자 요청 → AI/서버 로직 → 화면 상태로 이어지는 흐름을 만드는 풀스택 개발자입니다.
+React/TypeScript로 화면을, Python(FastAPI/Flask)·Spring Boot로 API와 AI 파이프라인(PyTorch, LangChain)을 연동하는 작업을 해왔습니다.
 
 - 🌐 포트폴리오: [ketose.vercel.app](https://ketose.vercel.app)
 - 🎓 백석대학교 소프트웨어학전공 · K-Digital Training (2024.11 ~ 2025.07)
 
 ## Stack
 
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat-square&logo=langchain&logoColor=white)
 ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
 ![Java](https://img.shields.io/badge/Java-007396?style=flat-square&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![C++](https://img.shields.io/badge/C%2B%2B-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
 
 Git/GitHub, Figma, Notion으로 협업하고, REST API·WebSocket 기반 데이터 흐름과 상태 관리(Zustand)를 주로 다룹니다.
 
