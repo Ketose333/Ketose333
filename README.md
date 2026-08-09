@@ -30,11 +30,11 @@ Git/GitHub, Figma, Notion으로 협업하고, REST API·WebSocket 기반 데이�
 
 | 프로젝트 | 기간 | 설명 |
 | --- | --- | --- |
-| [ketose-portfolio](https://github.com/Ketose333/ketose-portfolio) | 2026.04 ~ | 포트폴리오 사이트 + NULSIGHT + Amesato를 함께 관리하는 React/TypeScript/Vite 모노레포 |
+| [ketose-portfolio](https://github.com/Ketose333/ketose-portfolio) | 2026.04 ~ | 포트폴리오 사이트 + NULSIGHT를 함께 관리하는 React/TypeScript/Vite 모노레포 |
 | [같이가계](https://wizlet-budget.vercel.app) | 2025.10 ~ 2025.11 | React/Vite + Spring Boot 협업 가계부, WebSocket 실시간 동기화 |
 | [review-sentiment](https://github.com/Ketose333/review-sentiment) | 2026.06 | NSMC 한국어 영화 리뷰 감성 분석 — TF-IDF/LSTM/KLUE-BERT 비교 + LIME 해석 ([데모](https://nsmc-sentiment.streamlit.app)) |
 | [HyperFrame](https://github.com/Ketose333/HyperFrame) | — | Game Boy 웨이브 채널에서 출발한 드로잉 웨이브테이블 신스 VST3 (C++/JUCE) |
-| [yahounse](https://github.com/Ketose333/yahounse) | — | 별자리 운세를 알려주는 Discord 봇 |
+| [TaeyulBot](https://github.com/Ketose333/TaeyulBot) | — | 별자리 운세를 알려주는 Discord 봇 |
 
 ## Live
 
@@ -42,10 +42,9 @@ Git/GitHub, Figma, Notion으로 협업하고, REST API·WebSocket 기반 데이�
 | --- | --- | --- |
 | Portfolio | https://ketose.vercel.app | 프로젝트 인덱스 |
 | NULSIGHT | https://nulsight.vercel.app | 상태 기반 React UI |
-| Amesato | https://amesato.vercel.app | Canvas 렌더링과 DOM UI 분리 |
 | 같이가계 | https://wizlet-budget.vercel.app | 협업 가계부 프론트엔드 |
 
-NULSIGHT·Amesato·같이가계 프론트엔드는 `ketose-portfolio` 모노레포 안에서 관리합니다.
+NULSIGHT·같이가계 프론트엔드는 `ketose-portfolio` 모노레포 안에서 관리합니다.
 
 그 외 팀/학습 프로젝트(트립플래너, 체인카, 무디트리, blockchain_project, ReactKTraining)는 각 레포에서 확인할 수 있습니다.
 
