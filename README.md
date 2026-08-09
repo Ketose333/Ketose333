@@ -50,7 +50,7 @@ Git/GitHub, Figma, Notion으로 협업하고, REST API·WebSocket 기반 데이�
 | 도파체크 | https://dopacheck.luma200ok.com | 생활 습관 기록·인증 |
 | 하자체크 | https://hajacheck.luma200ok.com | 부동산 하자 점검 |
 
-포트폴리오와 같이가계 프론트엔드는 `ketose-portfolio` 모노레포에서 관리합니다.
+포트폴리오 사이트는 `ketose-portfolio` 모노레포에서 관리합니다. 같이가계는 별도 팀 프로젝트이며, 이 README에서는 배포 링크와 프로젝트 소개만 제공합니다.
 
 그 외 팀/학습 프로젝트(트립플래너, 체인카, 무디트리, blockchain_project, ReactKTraining)는 각 저장소에서 확인할 수 있습니다.
 
