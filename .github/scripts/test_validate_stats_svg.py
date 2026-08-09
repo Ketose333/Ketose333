@@ -102,6 +102,91 @@ class ValidateStatsSvgTest(unittest.TestCase):
         )
         self.validate_text("stats.svg", card("GitHub Stats", safe))
 
+    def test_accepts_realistic_generated_stats_card(self) -> None:
+        realistic = (
+            '<svg width="495" height="195" viewBox="0 0 495 195" version="1.1" '
+            'xmlns="http://www.w3.org/2000/svg" role="img" '
+            'aria-labelledby="descId">'
+            '<title id="titleId">Ketose333\'s GitHub Stats, Rank: A+</title>'
+            '<desc id="descId">Total Stars Earned: 12, Total Commits in 2026: 340, '
+            'Total PRs: 21, Total Issues: 8, Contributed to: 3</desc>'
+            '<style>'
+            '.header { font: 600 18px sans-serif; fill: #2f80ed; }'
+            '.stat { font: 600 14px sans-serif; fill: #434d58; }'
+            '.stagger { opacity: 0; }'
+            '.rank-text { font: 800 24px sans-serif; fill: #434d58; }'
+            '.bold { font-weight: 700; }'
+            '.icon { fill: #4c71f2; display: block; }'
+            '</style>'
+            '<rect x="0.5" y="0.5" rx="4.5" height="99%" stroke="#e4e2e2" '
+            'width="494" fill="#fffefe" stroke-opacity="1"/>'
+            '<g transform="translate(25, 35)">'
+            '<text x="0" y="0" class="header">Ketose333\'s GitHub Stats</text>'
+            '</g>'
+            '<g transform="translate(0, 55)">'
+            '<svg x="25">'
+            '<g class="stagger" transform="translate(25, 0)">'
+            '<svg class="icon" x="0" y="-9" viewBox="0 0 16 16" '
+            'width="16" height="16">'
+            '<path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 '
+            '01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l'
+            '-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 '
+            '01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/>'
+            '</svg>'
+            '<text class="stat bold" x="25" y="12.5">Total Stars Earned:</text>'
+            '<text class="stat bold" x="219.01" y="12.5">12</text>'
+            '</g>'
+            '<g class="stagger" transform="translate(25, 25)">'
+            '<text class="stat bold" x="25" y="12.5">Total Commits:</text>'
+            '<text class="stat bold" x="219.01" y="12.5">340</text>'
+            '</g>'
+            '</svg>'
+            '</g>'
+            '<g transform="translate(400, 100)">'
+            '<circle class="rank-circle-rim" cx="-10" cy="8" r="40" '
+            'fill="none" stroke="#2f80ed"/>'
+            '<text x="-10" y="14" class="rank-text">A+</text>'
+            '</g>'
+            '</svg>'
+        )
+        self.assertNotIn("error", realistic.lower())
+        self.validate_text("stats.svg", realistic)
+
+    def test_accepts_harmless_error_substring(self) -> None:
+        harmless = card(
+            "Ketose333's GitHub Stats",
+            '<style>.error-free-badge { fill: #2f80ed; }</style>'
+            '<desc>Build status: 0 errors, 0 warnings</desc>'
+            '<text class="error-free-badge">Terror Bay repository</text>',
+        )
+        self.validate_text("stats.svg", harmless)
+
+    def test_rejects_real_upstream_error_card(self) -> None:
+        # Reproduces @stats-organization/github-readme-stats-core's actual
+        # renderError() template (common/render.js) verbatim, to pin down that
+        # removing the generic `error` word check still rejects real error
+        # cards via the "something went wrong" phrase and the identity check.
+        upstream_error_card = (
+            '<svg width="576.5"  height="120" viewBox="0 0 576.5 120" '
+            'fill="#fffefe" xmlns="http://www.w3.org/2000/svg">'
+            "<style>"
+            ".text { font: 600 16px 'Segoe UI', Ubuntu, Sans-Serif; fill: #2f80ed }"
+            ".small { font: 600 12px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58 }"
+            ".gray { fill: #858585 }"
+            "</style>"
+            '<rect x="0.5" y="0.5" width="575.5" height="99%" rx="4.5" '
+            'fill="#fffefe" stroke="#e4e2e2"/>'
+            '<text x="25" y="45" class="text">Something went wrong! file an issue '
+            "at https://tinyurl.com/github-stats</text>"
+            '<text data-testid="message" x="25" y="55" class="text small">'
+            '<tspan x="25" dy="18">Could not fetch user</tspan>'
+            '<tspan x="25" dy="18" class="gray">Please try again later</tspan>'
+            "</text>"
+            "</svg>"
+        )
+        with self.assertRaises(ValueError):
+            self.validate_text("stats.svg", upstream_error_card)
+
     def test_bootstrap_is_safe_but_not_a_generated_card(self) -> None:
         bootstrap = Path(__file__).parents[2] / "profile" / "stats.svg"
         VALIDATOR.validate(bootstrap, allow_placeholder=True)
