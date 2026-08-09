@@ -23,6 +23,13 @@ ACTIVE_TAGS = {"script", "foreignobject", "iframe", "object", "embed", "animate"
 URL_ATTRIBUTES = {"href", "src"}
 CONTROL = re.compile(r"[\x00-\x1f\x7f]")
 SCHEME_WHITESPACE = re.compile(r"[\s\x00-\x1f\x7f]+")
+CSS_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
+CSS_ESCAPE = re.compile(
+    r"\\(?:([0-9a-fA-F]{1,6})(?:\r\n|[ \t\r\n\f])?|(\r\n|[\n\r\f])|(.))",
+    re.DOTALL,
+)
+CSS_URL = re.compile(r"url\s*\(", re.IGNORECASE)
+FRAGMENT = re.compile(r"#[A-Za-z_][A-Za-z0-9_.:-]*")
 EXPECTED_TEXT = {
     "stats.svg": ("github stats",),
     "top-langs.svg": ("most used languages", "top languages"),
@@ -33,10 +40,42 @@ def local_name(name: str) -> str:
     return name.rsplit("}", 1)[-1].lower()
 
 
-def reject_url_bearing_css(value: str) -> None:
-    normalized = SCHEME_WHITESPACE.sub("", value).lower()
-    if "url(" in normalized or "@import" in normalized:
-        raise ValueError("URL-bearing CSS is not allowed")
+def decode_css_escape(match: re.Match[str]) -> str:
+    if match.group(1):
+        codepoint = int(match.group(1), 16)
+        if codepoint == 0 or codepoint > 0x10FFFF or 0xD800 <= codepoint <= 0xDFFF:
+            return "\N{REPLACEMENT CHARACTER}"
+        return chr(codepoint)
+    if match.group(2):
+        return ""
+    return match.group(3)
+
+
+def canonicalize_css(value: str) -> str:
+    without_comments = CSS_COMMENT.sub("", value)
+    decoded = CSS_ESCAPE.sub(decode_css_escape, without_comments)
+    return CONTROL.sub("", decoded)
+
+
+def validate_css(value: str) -> None:
+    canonical = canonicalize_css(value)
+    if re.search(r"@\s*import\b", canonical, re.IGNORECASE):
+        raise ValueError("CSS @import is not allowed")
+    position = 0
+    while match := CSS_URL.search(canonical, position):
+        closing = canonical.find(")", match.end())
+        if closing < 0:
+            raise ValueError("malformed CSS url()")
+        target = canonical[match.end():closing].strip()
+        if target[:1] in {'"', "'"}:
+            quote = target[0]
+            if len(target) < 2 or target[-1] != quote:
+                raise ValueError("malformed quoted CSS url()")
+            target = target[1:-1].strip()
+        if target and not FRAGMENT.fullmatch(target):
+            normalized = SCHEME_WHITESPACE.sub("", target).lower()
+            raise ValueError(f"only empty or fragment CSS url() is allowed: {normalized[:24]}")
+        position = closing + 1
 
 
 def validate(path: Path, *, allow_placeholder: bool = False) -> None:
@@ -50,8 +89,6 @@ def validate(path: Path, *, allow_placeholder: bool = False) -> None:
         raise ValueError("forbidden active/error content")
     if not allow_placeholder and PLACEHOLDER.search(raw):
         raise ValueError("placeholder content is not a generated card")
-    if re.search(rb"url\s*\(", raw, re.IGNORECASE):
-        raise ValueError("CSS url() is not allowed")
     try:
         root = ET.fromstring(raw)
     except ET.ParseError as exc:
@@ -72,9 +109,9 @@ def validate(path: Path, *, allow_placeholder: bool = False) -> None:
                 if value and not value.startswith("#"):
                     raise ValueError(f"only empty or fragment {name} is allowed: {normalized[:24]}")
             if name == "style":
-                reject_url_bearing_css(value)
+                validate_css(value)
         if local_name(element.tag) == "style":
-            reject_url_bearing_css("".join(element.itertext()))
+            validate_css("".join(element.itertext()))
     searchable = " ".join(root.itertext()).lower()
     if not any(marker in searchable for marker in expected):
         raise ValueError(f"expected card identity missing: {' or '.join(expected)}")

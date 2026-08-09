@@ -43,6 +43,9 @@ class ValidateStatsSvgTest(unittest.TestCase):
             '<a href="relative.svg">relative URL</a>',
             '<style>.x{fill:url(https://evil.example/x)}</style>',
             '<style>.x{fill:u&#x72;l(https://evil.example/x)}</style>',
+            r'<style>.x{fill:u\72l(https://evil.example/x)}</style>',
+            r'<style>@\69mport "https://evil.example/x.css";</style>',
+            '<style>.x{fill:u/**/rl(https://evil.example/x)}</style>',
             '<style>@import "https://evil.example/x.css";</style>',
             '<text style="fill:u&#x72;l(https://evil.example/x)">styled</text>',
             '<animate attributeName="x" values="0;1"/>',
@@ -70,7 +73,12 @@ class ValidateStatsSvgTest(unittest.TestCase):
             self.validate_text("top-langs.svg", card("Unrelated SVG"))
 
     def test_accepts_internal_fragment_reference(self) -> None:
-        self.validate_text("stats.svg", card("GitHub Stats", '<use href="#safe-shape"/>'))
+        safe = (
+            '<use href="#safe-shape"/>'
+            '<style>.x { fill: UrL ( "#safe-shape" ); stroke: url(#other); filter: url( ) }</style>'
+            '<text style="fill: URL(\'#safe-shape\')">safe</text>'
+        )
+        self.validate_text("stats.svg", card("GitHub Stats", safe))
 
     def test_bootstrap_is_safe_but_not_a_generated_card(self) -> None:
         bootstrap = Path(__file__).parents[2] / "profile" / "stats.svg"
