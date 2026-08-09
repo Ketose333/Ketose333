@@ -21,6 +21,10 @@ FORBIDDEN_RAW = re.compile(
 PLACEHOLDER = re.compile(rb"data-portfolio-placeholder|bootstrap placeholder", re.IGNORECASE)
 ACTIVE_TAGS = {"script", "foreignobject", "iframe", "object", "embed", "animate", "set"}
 URL_ATTRIBUTES = {"href", "src"}
+RESOURCE_ATTRIBUTES = {
+    "clip-path", "color-profile", "cursor", "fill", "filter", "marker",
+    "marker-end", "marker-mid", "marker-start", "mask", "stroke",
+}
 CONTROL = re.compile(r"[\x00-\x1f\x7f]")
 SCHEME_WHITESPACE = re.compile(r"[\s\x00-\x1f\x7f]+")
 CSS_COMMENT = re.compile(r"/\*.*?\*/", re.DOTALL)
@@ -30,6 +34,7 @@ CSS_ESCAPE = re.compile(
 )
 CSS_URL = re.compile(r"url\s*\(", re.IGNORECASE)
 FRAGMENT = re.compile(r"#[A-Za-z_][A-Za-z0-9_.:-]*")
+EXTERNAL_CSS_SCHEME = re.compile(r"(?:https?|data|javascript|file)\s*:|//", re.IGNORECASE)
 EXPECTED_TEXT = {
     "stats.svg": ("github stats",),
     "top-langs.svg": ("most used languages", "top languages"),
@@ -61,6 +66,8 @@ def validate_css(value: str) -> None:
     canonical = canonicalize_css(value)
     if re.search(r"@\s*import\b", canonical, re.IGNORECASE):
         raise ValueError("CSS @import is not allowed")
+    if EXTERNAL_CSS_SCHEME.search(canonical):
+        raise ValueError("external CSS resource token is not allowed")
     position = 0
     while match := CSS_URL.search(canonical, position):
         closing = canonical.find(")", match.end())
@@ -108,7 +115,7 @@ def validate(path: Path, *, allow_placeholder: bool = False) -> None:
                 normalized = SCHEME_WHITESPACE.sub("", value).lower()
                 if value and not value.startswith("#"):
                     raise ValueError(f"only empty or fragment {name} is allowed: {normalized[:24]}")
-            if name == "style":
+            if name == "style" or name in RESOURCE_ATTRIBUTES:
                 validate_css(value)
         if local_name(element.tag) == "style":
             validate_css("".join(element.itertext()))

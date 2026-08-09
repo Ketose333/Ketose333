@@ -48,6 +48,12 @@ class ValidateStatsSvgTest(unittest.TestCase):
             '<style>.x{fill:u/**/rl(https://evil.example/x)}</style>',
             '<style>@import "https://evil.example/x.css";</style>',
             '<text style="fill:u&#x72;l(https://evil.example/x)">styled</text>',
+            '<text fill="url(https://evil.example/x)">external fill</text>',
+            r'<text filter="u\72l(https://evil.example/x)">escaped filter</text>',
+            '<text style="background-image:image-set(&quot;https://evil.example/x.png&quot; 1x)">image set</text>',
+            '<style>.x{background-image:image-set("//evil.example/x.png" 1x)}</style>',
+            '<style>.x{content:"data:text/html,evil"}</style>',
+            '<style>.x{content:"file:/etc/passwd"}</style>',
             '<animate attributeName="x" values="0;1"/>',
             '<set attributeName="href" to="https://evil.example"/>',
         )
@@ -76,7 +82,8 @@ class ValidateStatsSvgTest(unittest.TestCase):
         safe = (
             '<use href="#safe-shape"/>'
             '<style>.x { fill: UrL ( "#safe-shape" ); stroke: url(#other); filter: url( ) }</style>'
-            '<text style="fill: URL(\'#safe-shape\')">safe</text>'
+            '<text style="fill: URL(\'#safe-shape\')" fill="#3178c6" stroke="currentColor" '
+            'filter="url(#safe-filter)" clip-path="url(#safe-clip)">safe</text>'
         )
         self.validate_text("stats.svg", card("GitHub Stats", safe))
 
