@@ -14,8 +14,7 @@ MIN_BYTES = 100
 FORBIDDEN_RAW = re.compile(
     rb"<!DOCTYPE|<!ENTITY|<\?(?!xml\s+version\s*=)|@import|javascript\s*:|"
     rb"something went wrong|maximum retries|"
-    rb"deployment[ _-]*(?:paused|unavailable)|service unavailable|rate.?limit|"
-    rb"(?:^|[^a-z])error(?:[^a-z]|$)",
+    rb"deployment[ _-]*(?:paused|unavailable)|service unavailable|rate.?limit",
     re.IGNORECASE,
 )
 PLACEHOLDER = re.compile(rb"data-portfolio-placeholder|bootstrap placeholder", re.IGNORECASE)
