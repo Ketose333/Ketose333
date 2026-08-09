@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=0:3178C6,100:61DAFB&height=200&section=header&text=GwanYeong%20Kim&fontSize=80&fontAlign=50&fontAlignY=35&desc=Full-Stack%20%26%20AI%20Developer&descSize=20&descAlign=50&descAlignY=58)
+![header](https://capsule-render.vercel.app/api?type=waving&color=0:3178C6,100:61DAFB&height=200&section=header&text=GwanYeong%20Kim&fontSize=80&fontAlign=50&fontAlignY=35&desc=Full-Stack%20%26amp%3B%20AI%20Developer&descSize=20&descAlign=50&descAlignY=58)
 
 # 안녕하세요, 김관영입니다 👋
 
