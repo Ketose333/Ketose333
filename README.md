@@ -22,9 +22,9 @@ Git/GitHub, Figma, Notion으로 협업하고, REST API·WebSocket 기반 데이�
 
 ## GitHub Stats
 
-![Ketose333's GitHub Stats](https://github-readme-stats.vercel.app/api?username=Ketose333&show_icons=true&theme=tokyonight&hide_border=true)
+![Ketose333's GitHub Stats](./profile/stats.svg)
 
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=Ketose333&layout=compact&theme=tokyonight&hide_border=true)
+![Top Languages](./profile/top-langs.svg)
 
 ## Projects
 
