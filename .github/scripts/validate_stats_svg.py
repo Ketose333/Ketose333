@@ -32,7 +32,7 @@ CSS_ESCAPE = re.compile(
     r"\\(?:([0-9a-fA-F]{1,6})(?:\r\n|[ \t\r\n\f])?|(\r\n|[\n\r\f])|(.))",
     re.DOTALL,
 )
-CSS_URL = re.compile(r"url\s*\(", re.IGNORECASE)
+CSS_REFERENCE = re.compile(r"(?:url|src)\s*\(", re.IGNORECASE)
 FRAGMENT = re.compile(r"#[A-Za-z_][A-Za-z0-9_.:-]*")
 EXTERNAL_CSS_SCHEME = re.compile(r"(?:https?|data|javascript|file)\s*:|//", re.IGNORECASE)
 EXTERNAL_IMAGE_FUNCTION = re.compile(
@@ -78,19 +78,19 @@ def validate_css(value: str) -> None:
     if EXTERNAL_IMAGE_FUNCTION.search(canonical):
         raise ValueError("external CSS image function is not allowed")
     position = 0
-    while match := CSS_URL.search(canonical, position):
+    while match := CSS_REFERENCE.search(canonical, position):
         closing = canonical.find(")", match.end())
         if closing < 0:
-            raise ValueError("malformed CSS url()")
+            raise ValueError("malformed CSS resource reference")
         target = canonical[match.end():closing].strip()
         if target[:1] in {'"', "'"}:
             quote = target[0]
             if len(target) < 2 or target[-1] != quote:
-                raise ValueError("malformed quoted CSS url()")
+                raise ValueError("malformed quoted CSS resource reference")
             target = target[1:-1].strip()
         if target and not FRAGMENT.fullmatch(target):
             normalized = SCHEME_WHITESPACE.sub("", target).lower()
-            raise ValueError(f"only empty or fragment CSS url() is allowed: {normalized[:24]}")
+            raise ValueError(f"only empty or fragment CSS reference is allowed: {normalized[:24]}")
         position = closing + 1
 
 

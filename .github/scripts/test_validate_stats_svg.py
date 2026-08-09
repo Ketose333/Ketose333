@@ -62,6 +62,12 @@ class ValidateStatsSvgTest(unittest.TestCase):
             '<style>.x{background-image:image-set("//evil.example/x.png" 1x)}</style>',
             '<style>.x{content:"data:text/html,evil"}</style>',
             '<style>.x{content:"file:/etc/passwd"}</style>',
+            '<style>@font-face{src:src("relative.woff2")}</style>',
+            '<style>@font-face{src:src("https://evil.example/font.woff2")}</style>',
+            '<style>@font-face{src:src("data:font/woff2,evil")}</style>',
+            r'<style>@font-face{src:s\72 c("relative.woff2")}</style>',
+            '<style>@font-face{src:s/**/rc("relative.woff2")}</style>',
+            '<style>@font-face{src:SrC ( "relative.woff2" )}</style>',
             '<animate attributeName="x" values="0;1"/>',
             '<set attributeName="href" to="https://evil.example"/>',
         )
@@ -90,6 +96,7 @@ class ValidateStatsSvgTest(unittest.TestCase):
         safe = (
             '<use href="#safe-shape"/>'
             '<style>.x { fill: UrL ( "#safe-shape" ); stroke: url(#other); filter: url( ) }</style>'
+            '<style>@font-face { src: SRC("#safe-font"); } .empty { src: src( ); }</style>'
             '<text style="fill: URL(\'#safe-shape\')" fill="#3178c6" stroke="currentColor" '
             'filter="url(#safe-filter)" clip-path="url(#safe-clip)">safe</text>'
         )
