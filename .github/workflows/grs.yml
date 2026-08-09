@@ -1,0 +1,85 @@
+name: Update README cards
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: github-readme-stats
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout without write credentials
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+
+      - name: Generate stats card
+        uses: stats-organization/github-readme-stats-action@d82657a0e215a28ec48bfc9b3987999a279f93be
+        with:
+          card: stats
+          options: username=${{ github.repository_owner }}&show_icons=true&theme=tokyonight&hide_border=true
+          path: profile/stats.svg
+          token: ${{ github.token }}
+
+      - name: Generate top languages card
+        uses: stats-organization/github-readme-stats-action@d82657a0e215a28ec48bfc9b3987999a279f93be
+        with:
+          card: top-langs
+          options: username=${{ github.repository_owner }}&layout=compact&langs_count=6&theme=tokyonight&hide_border=true
+          path: profile/top-langs.svg
+          token: ${{ github.token }}
+
+      - name: Validate generated SVGs
+        run: python .github/scripts/validate_stats_svg.py profile/stats.svg profile/top-langs.svg
+
+      - name: Upload validated cards
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: github-readme-stats
+          path: |
+            profile/stats.svg
+            profile/top-langs.svg
+          if-no-files-found: error
+          retention-days: 1
+
+  commit:
+    needs: generate
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Checkout with push credential
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Download validated cards
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: github-readme-stats
+          path: generated-profile
+
+      - name: Revalidate and install cards
+        run: |
+          python .github/scripts/validate_stats_svg.py generated-profile/stats.svg generated-profile/top-langs.svg
+          install -m 0644 generated-profile/stats.svg profile/stats.svg
+          install -m 0644 generated-profile/top-langs.svg profile/top-langs.svg
+          python .github/scripts/validate_stats_svg.py profile/stats.svg profile/top-langs.svg
+
+      - name: Commit cards
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/stats.svg profile/top-langs.svg
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: GitHub 통계 카드 갱신"
+          git push
