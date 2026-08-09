@@ -35,6 +35,13 @@ CSS_ESCAPE = re.compile(
 CSS_URL = re.compile(r"url\s*\(", re.IGNORECASE)
 FRAGMENT = re.compile(r"#[A-Za-z_][A-Za-z0-9_.:-]*")
 EXTERNAL_CSS_SCHEME = re.compile(r"(?:https?|data|javascript|file)\s*:|//", re.IGNORECASE)
+EXTERNAL_IMAGE_FUNCTION = re.compile(
+    r"(?:^|[^A-Za-z0-9_-])(?:"
+    r"(?:-webkit-)?image-set|(?:-webkit-)?cross-fade|(?:-moz-)?element|"
+    r"image|paint|-webkit-gradient|-moz-image-rect"
+    r")\s*\(",
+    re.IGNORECASE,
+)
 EXPECTED_TEXT = {
     "stats.svg": ("github stats",),
     "top-langs.svg": ("most used languages", "top languages"),
@@ -68,6 +75,8 @@ def validate_css(value: str) -> None:
         raise ValueError("CSS @import is not allowed")
     if EXTERNAL_CSS_SCHEME.search(canonical):
         raise ValueError("external CSS resource token is not allowed")
+    if EXTERNAL_IMAGE_FUNCTION.search(canonical):
+        raise ValueError("external CSS image function is not allowed")
     position = 0
     while match := CSS_URL.search(canonical, position):
         closing = canonical.find(")", match.end())
