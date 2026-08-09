@@ -12,15 +12,17 @@ from pathlib import Path
 MAX_BYTES = 512_000
 MIN_BYTES = 100
 FORBIDDEN_RAW = re.compile(
-    rb"<!DOCTYPE|<!ENTITY|<\?(?!xml\s+version\s*=)|@import|javascript\s*:|data-portfolio-placeholder|"
-    rb"bootstrap placeholder|something went wrong|maximum retries|"
+    rb"<!DOCTYPE|<!ENTITY|<\?(?!xml\s+version\s*=)|@import|javascript\s*:|"
+    rb"something went wrong|maximum retries|"
     rb"deployment[ _-]*(?:paused|unavailable)|service unavailable|rate.?limit|"
     rb"(?:^|[^a-z])error(?:[^a-z]|$)",
     re.IGNORECASE,
 )
-ACTIVE_TAGS = {"script", "foreignobject", "iframe", "object", "embed"}
+PLACEHOLDER = re.compile(rb"data-portfolio-placeholder|bootstrap placeholder", re.IGNORECASE)
+ACTIVE_TAGS = {"script", "foreignobject", "iframe", "object", "embed", "animate", "set"}
 URL_ATTRIBUTES = {"href", "src"}
-EXTERNAL_URL = re.compile(r"^(?:https?:|//|data:|javascript:)", re.IGNORECASE)
+CONTROL = re.compile(r"[\x00-\x1f\x7f]")
+SCHEME_WHITESPACE = re.compile(r"[\s\x00-\x1f\x7f]+")
 EXPECTED_TEXT = {
     "stats.svg": ("github stats",),
     "top-langs.svg": ("most used languages", "top languages"),
@@ -31,7 +33,13 @@ def local_name(name: str) -> str:
     return name.rsplit("}", 1)[-1].lower()
 
 
-def validate(path: Path) -> None:
+def reject_url_bearing_css(value: str) -> None:
+    normalized = SCHEME_WHITESPACE.sub("", value).lower()
+    if "url(" in normalized or "@import" in normalized:
+        raise ValueError("URL-bearing CSS is not allowed")
+
+
+def validate(path: Path, *, allow_placeholder: bool = False) -> None:
     expected = EXPECTED_TEXT.get(path.name)
     if expected is None:
         raise ValueError(f"unexpected card filename: {path.name}")
@@ -39,7 +47,9 @@ def validate(path: Path) -> None:
     if not MIN_BYTES <= len(raw) <= MAX_BYTES:
         raise ValueError(f"card size outside {MIN_BYTES}..{MAX_BYTES} bytes: {len(raw)}")
     if FORBIDDEN_RAW.search(raw):
-        raise ValueError("forbidden active/error/placeholder content")
+        raise ValueError("forbidden active/error content")
+    if not allow_placeholder and PLACEHOLDER.search(raw):
+        raise ValueError("placeholder content is not a generated card")
     if re.search(rb"url\s*\(", raw, re.IGNORECASE):
         raise ValueError("CSS url() is not allowed")
     try:
@@ -55,8 +65,16 @@ def validate(path: Path) -> None:
             name = local_name(raw_name)
             if name.startswith("on"):
                 raise ValueError(f"event attribute is not allowed: {name}")
-            if name in URL_ATTRIBUTES and EXTERNAL_URL.match(value.strip()):
-                raise ValueError(f"external URL is not allowed in {name}")
+            if CONTROL.search(value):
+                raise ValueError(f"control character is not allowed in {name}")
+            if name in URL_ATTRIBUTES:
+                normalized = SCHEME_WHITESPACE.sub("", value).lower()
+                if value and not value.startswith("#"):
+                    raise ValueError(f"only empty or fragment {name} is allowed: {normalized[:24]}")
+            if name == "style":
+                reject_url_bearing_css(value)
+        if local_name(element.tag) == "style":
+            reject_url_bearing_css("".join(element.itertext()))
     searchable = " ".join(root.itertext()).lower()
     if not any(marker in searchable for marker in expected):
         raise ValueError(f"expected card identity missing: {' or '.join(expected)}")

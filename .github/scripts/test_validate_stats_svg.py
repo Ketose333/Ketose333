@@ -37,8 +37,16 @@ class ValidateStatsSvgTest(unittest.TestCase):
             '<text onload="alert(1)">event</text>',
             '<a href="https://evil.example">external</a>',
             '<a href="javascript:alert(1)">script URL</a>',
+            '<a href="java&#x09;script:alert(1)">entity tab URL</a>',
+            '<a href="java\nscript:alert(1)">newline URL</a>',
+            '<a href="data:text/html,evil">data URL</a>',
+            '<a href="relative.svg">relative URL</a>',
             '<style>.x{fill:url(https://evil.example/x)}</style>',
+            '<style>.x{fill:u&#x72;l(https://evil.example/x)}</style>',
             '<style>@import "https://evil.example/x.css";</style>',
+            '<text style="fill:u&#x72;l(https://evil.example/x)">styled</text>',
+            '<animate attributeName="x" values="0;1"/>',
+            '<set attributeName="href" to="https://evil.example"/>',
         )
         for payload in payloads:
             with self.subTest(payload=payload):
@@ -60,6 +68,15 @@ class ValidateStatsSvgTest(unittest.TestCase):
     def test_rejects_wrong_identity(self) -> None:
         with self.assertRaises(ValueError):
             self.validate_text("top-langs.svg", card("Unrelated SVG"))
+
+    def test_accepts_internal_fragment_reference(self) -> None:
+        self.validate_text("stats.svg", card("GitHub Stats", '<use href="#safe-shape"/>'))
+
+    def test_bootstrap_is_safe_but_not_a_generated_card(self) -> None:
+        bootstrap = Path(__file__).parents[2] / "profile" / "stats.svg"
+        VALIDATOR.validate(bootstrap, allow_placeholder=True)
+        with self.assertRaises(ValueError):
+            VALIDATOR.validate(bootstrap)
 
 
 if __name__ == "__main__":
