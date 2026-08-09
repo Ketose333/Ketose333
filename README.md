@@ -31,14 +31,14 @@ Git/GitHub, Figma, Notion으로 협업하고, REST API·WebSocket 기반 데이�
 <!-- PORTFOLIO:PROJECTS:START -->
 | 프로젝트 | 기간 | 설명 |
 | --- | --- | --- |
-| [웹 포트폴리오](https://github.com/Ketose333/ketose-portfolio) | 2026.04.25 ~ 2026.05.19 | 배포 프로젝트와 공통 UI·메타데이터를 관리하는 포트폴리오 모노레포 |
-| [같이가계](https://github.com/sinisack/ogetherBudget_Project) | 2025.10.17 ~ 2025.11.21 | WebSocket 기반 실시간 협업 가계부 |
-| [review-sentiment](https://github.com/Ketose333/review-sentiment) | 2026.06.21 ~ 2026.07.03 | KLUE-BERT 감성 분류와 모델 비교를 제공하는 Streamlit 앱 |
-| [music-mood-recs](https://github.com/Ketose333/music-mood-recs) | 2026.06.25 ~ 2026.07.04 | CNN 무드 분류와 임베딩 추천을 결합한 Streamlit 앱 |
-| [도파체크](https://github.com/luma-team-ai/DopaCheck) | 2026.06.10 ~ 2026.06.17 | 영수증 OCR을 지출 분석과 디톡스 챌린지로 연결한 팀 서비스 |
-| [하자체크](https://github.com/luma-team-ai/HajaCheck) | 2026.07.09 ~ 2026.08.07 | AI 시설물 하자 탐지와 근거 기반 점검 보고서 생성 서비스 |
-| [HyperFrame](https://github.com/Ketose333/HyperFrame) | 2026.07 ~ 현재 | 드로잉 웨이브테이블 신스 VST3 플러그인 |
-| [TaeyulBot](https://github.com/Ketose333/TaeyulBot) | 2026.06.12 ~ 2026.08.06 | 별자리 운세와 LLM 롤플레이 대화를 제공하는 Discord 봇 |
+| [웹 포트폴리오](https://github.com/Ketose333/ketose-portfolio) | 2026.04.25 ~ 2026.05.19 (25일) | 배포 프로젝트와 공통 UI·메타데이터를 관리하는 포트폴리오 모노레포 |
+| [같이가계](https://github.com/sinisack/ogetherBudget_Project) | 2025.10.17 ~ 2025.11.21 (5주) | WebSocket 기반 실시간 협업 가계부 |
+| [review-sentiment](https://github.com/Ketose333/review-sentiment) | 2026.06.21 ~ 2026.07.03 (12일) | KLUE-BERT 감성 분류와 모델 비교를 제공하는 Streamlit 앱 |
+| [music-mood-recs](https://github.com/Ketose333/music-mood-recs) | 2026.06.25 ~ 2026.07.04 (9일) | CNN 무드 분류와 임베딩 추천을 결합한 Streamlit 앱 |
+| [도파체크](https://github.com/luma-team-ai/DopaCheck) | 2026.06.10 ~ 2026.06.17 (7일) | 영수증 OCR을 지출 분석과 디톡스 챌린지로 연결한 팀 서비스 |
+| [하자체크](https://github.com/luma-team-ai/HajaCheck) | 2026.07.09 ~ 2026.08.07 (4주) | AI 시설물 하자 탐지와 근거 기반 점검 보고서 생성 서비스 |
+| [HyperFrame](https://github.com/Ketose333/HyperFrame) | 2026.07.01 ~ 현재 (진행 중) | 드로잉 웨이브테이블 신스 VST3 플러그인 |
+| [TaeyulBot](https://github.com/Ketose333/TaeyulBot) | 2026.06.12 ~ 2026.08.06 (8주) | 별자리 운세와 LLM 롤플레이 대화를 제공하는 Discord 봇 |
 
 ### Live
 
