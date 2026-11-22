@@ -2,8 +2,8 @@
 
 # 안녕하세요, 김관영입니다 👋
 
-사용자 요청 → AI/서버 로직 → 화면 상태로 이어지는 흐름을 만드는 풀스택 개발자입니다.
-React/TypeScript로 화면을, Python(FastAPI/Flask)·Spring Boot로 API와 AI 파이프라인(PyTorch, LangChain)을 연동하는 작업을 해왔습니다.
+Python API와 React·TypeScript 화면을 구현하고, 요청 처리부터 결과 표시까지 이어지는 흐름을 검증해 온 개발자입니다.
+HajaCheck의 FastAPI 보고서 생성 API와 Java/Spring 재검증 API를 구현했으며, 개인 리뷰 감성 분석을 FastAPI·PostgreSQL·Next.js로 이관해 공개 배포했습니다.
 
 - 🌐 포트폴리오: [ketose.vercel.app](https://ketose.vercel.app)
 - 🎓 백석대학교 소프트웨어학전공 · K-Digital Training (2024.11 ~ 2025.07)
@@ -20,13 +20,15 @@ React/TypeScript로 화면을, Python(FastAPI/Flask)·Spring Boot로 API와 AI �
 ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=flat-square&logo=langchain&logoColor=white)
 ![C++](https://img.shields.io/badge/C%2B%2B-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
 
-Git/GitHub, Figma, Notion으로 협업하고, REST API·WebSocket 기반 데이터 흐름과 상태 관리(Zustand)를 주로 다룹니다.
+Git/GitHub, Figma, Notion으로 협업합니다. API 연동·화면 상태 관리와 함께 입력·상태·권한에 따른 실패 조건을 테스트하고, 배포 환경의 의존성과 메모리 제약을 확인해 수정했습니다.
 
-## GitHub Stats
+## Selected Work
 
-![Ketose333's GitHub Stats](./profile/stats.svg)
-
-![Top Languages](./profile/top-langs.svg)
+| 프로젝트 | 직접 맡은 일과 확인한 결과 |
+| --- | --- |
+| [HajaCheck](https://github.com/luma-team-ai/HajaCheck) · 팀 프로젝트 | FastAPI 보고서 API·4개 섹션 생성 체인 구현, 팀원 검증 모듈 연결·재생성 테스트. 별도 Java/Spring API에서 편집 후 구조를 재검증하고 상태·권한 경계를 테스트했습니다. |
+| [리뷰 감성 분석](https://github.com/Ketose333/review-sentiment) · 개인 프로젝트 | Streamlit 데모를 FastAPI·PostgreSQL·Next.js로 이관해 Vercel·Modal·Neon에 배포했습니다. 입력 검증·오류 처리·실행 기록을 구현하고 콜드 스타트와 메모리 설정을 비교했습니다. |
+| [같이가계](https://github.com/sinisack/ogetherBudget_Project) · 팀 프로젝트 | React/Vite 대시보드·인증 화면과 Spring Boot API 연동을 담당했습니다. WebSocket 이벤트를 화면 상태에 반영했습니다. |
 
 ## Projects
 
@@ -57,3 +59,9 @@ Git/GitHub, Figma, Notion으로 협업하고, REST API·WebSocket 기반 데이�
 ## Contact
 
 질문이나 협업 제안은 이슈로 남겨주시면 확인 후 답변드립니다.
+
+## GitHub Stats
+
+![Ketose333's GitHub Stats](./profile/stats.svg)
+
+![Top Languages](./profile/top-langs.svg)
